@@ -6,7 +6,7 @@ const cors = require('cors');
 var expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose'); 
 const methodOverride = require('method-override');
-
+const session = require('express-session')
 const app = express();
 
 app.use(bodyParser());
@@ -32,11 +32,13 @@ mongoose.connect('mongodb://root:Admin123@ds251158.mlab.com:51158/student',{ use
 });
 
 
+app.use(session({secret: 'user_session',saveUninitialized: true,resave: true}));
 
 
 // Load Routes
 
 const register = require('./routes/register');
+const login = require('./routes/login');
 // const studentListing = require('./routes/studentListing');
 
 
@@ -44,6 +46,7 @@ const register = require('./routes/register');
 // Use Routes
 
 app.use('/', register);
+app.use('/login', login);
 // app.use('/student_listing', studentListing);
 
 

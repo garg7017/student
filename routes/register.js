@@ -10,26 +10,76 @@ const countryStatePpicker = require('country-state-picker');
 const fs = require('fs');
 
 
+/**
+ * Login Route
+ */
+
+router.get('/login',(req,res)=>{
+    res.render('login',{layout:'edit_layout'});
+})
 
 
-// router.all('/*', (req, res, next)=>{
-//     req.app.locals.layout = 'layout';
-//     next();
-// });
+/**
+ * Logout route
+ */
+router.get('/logout',(req,res) => {
+    req.session.destroy((err) => {
+        if(err) {
+            return console.log(err);
+        }
+        res.redirect('/login');
+    });
+});
+
+
+router.post('/login',(req,res)=>{
+    let errors = [];
+    if(req.body.email == ''){
+        errors.push({ type: 'email', message: 'please enter Email' });
+    }
+    if(req.body.password == ''){
+        errors.push({ type: 'password', message: 'please enter password' });
+    }
+    if(errors.length == 0){
+        StudentDetail.find({sd_email:req.body.email, sd_password:req.body.password}).then(validPassword=>{
+            if(validPassword.length == 0){
+                    errors.push({ type: 'password2',  message: 'Incorrect username or password.' });
+                    res.render('login',{errors:errors});
+            } else {
+                // console.log(validPassword);
+                // console.log(validPassword[0].sd_email);
+                user_session = req.session;
+                user_session.email = validPassword[0].sd_email;
+                user_session.name = (validPassword[0].sd_first_name) + ' ' + validPassword[0].sd_last_name;
+
+                res.redirect('student_listing');
+            }
+        })
+    } else {
+        res.render('login',{errors:errors});
+    }
+})
+
+
 
 
 /**
  * Delete student data from collection (student & academic data)
  */
 router.delete('/:id',(req,res)=>{
-    id = req.params.id;
+    authorize = checkAuthantication(req);
+    if(authorize){
+        id = req.params.id;
 
-    StudentAcedemicDetail.deleteMany({sad_student_id:id}).then(removeAcademicData => {
-        StudentDetail.remove({_id:id}).then(removeStudent =>{
-            console.log('Removed student data from document');
-            res.render('student_listing');
-        })
-    })   
+        StudentAcedemicDetail.deleteMany({sad_student_id:id}).then(removeAcademicData => {
+            StudentDetail.remove({_id:id}).then(removeStudent =>{
+                console.log('Removed student data from document');
+                res.redirect('student_listing');
+            })
+        }) 
+    } else {
+        res.redirect('login');
+    }
 })
 
 
@@ -38,27 +88,55 @@ router.delete('/:id',(req,res)=>{
  * Student listing route
  */
 
-router.get('/student-listing', (req,res)=>{
+router.get('/student_listing', (req,res)=>{
+    authorize = checkAuthantication(req);
     req.app.locals.layout = 'layout';
     //get all data from DB
     //get count of students
-    let total_students = 0;
-    StudentDetail.countDocuments({}).then(total=>{
-        total_students = total;
-    })
+    if(authorize){
+        let total_students = 0;
+        StudentDetail.countDocuments({}).then(total=>{
+            total_students = total;
+        })
 
-    var page = 1;
+        var page = 1;
 
-    StudentDetail.find({}).limit(2).then(students=>{
-        res.render('student_listing', {students:students,total_students:total_students,page_no:page});
-    })
+        StudentDetail.find({}).limit(2).then(students=>{
+            res.render('student_listing', {students:students,total_students:total_students,page_no:page});
+        })
+    } else {
+        res.redirect('login');
+    }
 });
 
 /** End of student listing route */
 
+
+/**
+ * Check user login
+ */
+function checkAuthantication(req){
+    let authorize = false;
+    user_session = req.session;
+    console.log(user_session.email);
+    if(user_session.email){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+
 router.get('/',(req,res)=>{
-    let countries = countryStatePpicker.getCountries();
-    res.render('index',{countries:countries});
+    authorize = checkAuthantication(req);
+    if(authorize){
+        let countries = countryStatePpicker.getCountries();
+        res.render('index',{countries:countries});
+    } else {
+        res.redirect('login');
+    }
 })
 
 
