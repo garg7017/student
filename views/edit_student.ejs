@@ -1,0 +1,336 @@
+<!-- code for persistence -->
+<%
+	var firstName = '';
+	var lastName = '';
+	var dob = '';
+	var email = '';
+	var mobile = '';
+	var city = '';
+	var pincode = '';
+	var state = '';
+	var address = '';
+	var country = '';
+	var gender = '';
+	var hobby2_arr = [];
+	var X_board = '';
+	var X_perc = '';
+	var X_yop = '';
+	var XII_board = '';
+	var XII_perc = '';
+	var XII_yop = '';
+	var course = '';
+	var id = '';
+%>
+<% if(typeof data != "undefined") {  %>
+	<%  var firstName = data.sd_first_name;
+		var id = data._id;
+		var lastName = data.sd_last_name;
+
+		<!-- Format date -->
+		var date = new Date(data.sd_dob);
+		var dd = date.getDate();
+		var mm = date.getMonth()+1; 
+		var yyyy = date.getFullYear();
+		if(dd<10) dd='0'+dd;
+		if(mm<10) mm='0'+mm;
+
+		var dob = mm + '/' +dd + '/' +yyyy;
+
+		
+		var email = data.sd_email;
+		var phone = data.sd_phone;
+		var city = data.sd_city;
+		var pincode = data.sd_zip_code;
+		var state = data.sd_state;
+		var address = data.sd_address;
+		var country = data.sd_country;
+		var gender = data.sd_gender;
+		var hobby2_arr = data.sd_hobbies.split(',');
+		var course = data.sd_applied_course;
+
+		<!-- Academic Details -->
+
+		for(let course_details of data2){
+			<!-- Class 10th details -->
+			if(course_details.sad_course_name == '10'){
+				var X_board = course_details.sad_board;
+				var X_perc = course_details.sad_percentage;
+				var X_yop = course_details.sad_year_of_passing;
+			} else if(course_details.sad_course_name == '12'){
+				<!-- Class 12th details -->
+				var XII_board = course_details.sad_board;
+				var XII_perc = course_details.sad_percentage;
+				var XII_yop = course_details.sad_year_of_passing;
+			}
+		}
+	%>
+	<% } else if(typeof req != 'undefined'){
+		var firstName = req.body.first_name;
+		var id = req.body.update;
+		var lastName = req.body.last_name;
+		var dob = req.body.date;
+		var email = req.body.email;
+		var phone = req.body.contact_no;
+		var city = req.body.city;
+		var pincode = req.body.pincode;
+		var state = req.body.state;
+		var address = req.body.address_line1;
+		var country = req.body.country;
+		var gender = req.body.gender;
+		var hobby2_arr = hobby_arr;
+		var X_board = req.body.X_board;
+		var X_perc = req.body.X_perc;
+		var X_yop = req.body.X_yop;
+		var XII_board = req.body.XII_board;
+		var XII_perc = req.body.XII_perc;
+		var XII_yop = req.body.XII_yop;
+		var course = req.body.course;
+	} %>
+<div class="container">
+	<div class="ManagementSystem">
+		<h1 class="form-title">Student Management System</h1>
+		<div>
+		<% if(typeof errors != "undefined") {  %>
+			<div class="alert alert-danger">
+				<% errors.forEach(function(error, index) { %>
+					<%= index+1 %>: <%=  error.message   %>
+					<br/>
+				<% }); %>
+			</div>
+		<% } %>
+		</div>
+			<form id="sample" method="post" action="update_student">
+				<input type="hidden" name="update" value="<%= id %>">
+			<div class="row">
+				<input type="hidden" value="<%= id %>" name="edit">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-right">
+				<div class="profile-pic">
+					<div class="form-group">
+						<label>Upload Image</label>
+						<img id='img-upload' src="images/user.png"/>
+						<div class="input-group">
+							<span class="input-group-btn">
+								<span class="btn btn-default btn-file">
+									Browse… <input type="file" id="imgInp">
+								</span>
+							</span>
+							<input type="text" class="form-control" readonly>
+						</div>
+						
+						<div class="form-group">
+							<label>Upload Documents</label>
+							<div class="box">
+								<input type="file" name="file" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected"/>
+								<label for="file-1"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"/></svg> <span>Choose a file&hellip;</span></label>
+							</div>
+						</div>						
+					</div>
+				</div>	
+				</div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>First Name <span class="color-danger">*</span></label>
+								
+								<input type="text" class="form-control" id="first_name" name="first_name" data-rule-firstname="true" value="<%= firstName %>"/>
+							</div>
+						</div>						
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Last Name <span class="color-danger">*</span></label>
+								<input type="text" class="form-control" id="last_name" name="last_name" data-rule-lastname="true" value="<%= lastName %>"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Date of Birth <span class="color-danger">*</span></label>
+								<input placeholder="DD/MM/YYYY" type="text" class="form-control" id="date1" name="date" value="<%= dob %>" data-rule-requiredmmddyy="true"/>									
+								
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Email <span class="color-danger">*</span></label>
+								<input type="text" id="email" name="email" class="form-control" value="<%= email %>" data-rule-email="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Password <span class="color-danger">*</span></label>
+								<input type="password" class="form-control" id="password" name="password" value="" data-rule-passwd="true"/>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Confirm Password <span class="color-danger">*</span></label>
+								<input type="password" name="confirm_password" class="form-control" value=""/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Mobile Number <span class="color-danger">*</span></label>
+								<input type="text" id="contact_no" name="contact_no" value="<%= phone %>" class="form-control" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Gender <span class="color-danger">*</span></label>
+								<div class="gender_controls">
+									<label class="radio-inline" for="gender-0">
+									  <input name="gender" id="gender-0" value="Male" <%= gender == 'Male'   ? 'checked' : ''%> type="radio" checked="checked">
+									  Male
+									</label>
+									<label class="radio-inline" for="gender-1">
+									  <input name="gender" id="gender-1" value="Female" <%= gender == 'Female'   ? 'checked' : ''%> type="radio" >
+									  Female
+									</label>
+								  </div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label>Address <span class="color-danger">*</span></label>
+								<textarea class="form-control" id="address_line1" name="address_line1"><%= address %></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>City <span class="color-danger">*</span></label>
+								<input type="text" name="city" id="city" class="form-control" value="<%= city %>" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Zip Code<span class="color-danger">*</span></label>
+								<input type="text" name="pincode" id="pincode" class="form-control" value="<%= pincode %>" />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>State <span class="color-danger">*</span></label>
+								<input type="text" name="state" id="state" class="form-control" value="<%= state %>" />
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="form-group">
+								<label>Country <span class="color-danger">*</span></label>
+								<select name="country" class="form-control" >
+									<option value=""   <%= country == ''   ? 'selected' : ''%> >(please select a country)</option>
+									<option value="AF" <%= country == 'AF' ? 'selected' : ''%> >Afghanistan </option>
+									<option value="AL" <%= country == 'AL' ? 'selected' : ''%> >Albania </option>
+									<option value="DZ" <%= country == 'DZ' ? 'selected' : ''%> >Algeria </option>
+								</select>
+							</div>
+						</div>						
+					</div>	
+					<div class="row">						
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label>Hobbies</label>
+								<% if(typeof hobby2_arr == 'undefined'){
+									hobby2_arr = [];
+								} %>
+								<div class="controls">
+									<% let checked1 = hobby2_arr.indexOf("Drawing") != -1 ? "checked" : "" %>
+									<label class="checkbox-inline"><input type="checkbox" name="hobby[]" value="Drawing" <%= checked1  %>>Drawing</label>
+									<% let checked2 = hobby2_arr.indexOf("Singing") != -1 ? "checked" : "" %>
+									<label class="checkbox-inline"><input type="checkbox" name="hobby[]" value="Singing" <%= checked2  %> >Singing</label>
+									<% let checked3 = hobby2_arr.indexOf("Dancing") != -1 ? "checked" : "" %>
+									<label class="checkbox-inline"><input type="checkbox" name="hobby[]" value="Dancing" <%= checked3  %> >Dancing</label>
+									<% let checked4 = hobby2_arr.indexOf("Sketching") != -1 ? "checked" : "" %>
+									<label class="checkbox-inline"><input type="checkbox" name="hobby[]" value="Sketching" <%= checked4  %> >Sketching</label>
+									<% let checked5 = hobby2_arr.indexOf("Others") != -1 ? "checked" : "" %>
+									<label class="checkbox-inline"><input type="checkbox" name="hobby[]" value="Others" <%= checked5  %> >Others</label>
+									<!-- <label class="checkbox-inline"><input type="text" class="form-control" value=""></label> -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label>Qualification</label>
+								<div class="table-responsive">
+									<table>
+										<thead>
+											<tr>
+												<th>Sr. No.</th>
+												<th>Examination</th>
+												<th>Board</th>
+												<th>Percentage</th>
+												<th>Year of Passing</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>Class X</td>
+												<td><input type="text" class="form-control" name="X_board" id="X_board" value="<%= X_board %>"></td>
+												<td><input type="text" class="form-control" name="X_perc" id="X_perc" value="<%= X_perc %>"></td>
+												<td><input type="text" class="form-control" name="X_yop" id="X_yop" value="<%= X_yop %>"></td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Class XII</td>
+												<td><input type="text" class="form-control" name="XII_board" id="XII_board" value="<%= XII_board %>"></td>
+												<td><input type="text" class="form-control" name="XII_perc" id="XII_perc" value="<%= XII_perc %>"></td>
+												<td><input type="text" class="form-control" name="XII_yop" id="XII_yop" value="<%= XII_yop %>"></td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>		
+					</div>	
+					<div class="row">						
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="form-group">
+								<label>Courses Applied for</label>
+								<div class="controls">
+									<label class="radio-inline" for="gender-0">
+									  <input name="course" id="course-0" value="bca" <%= course == 'bca'   ? 'checked' : ''%> type="radio">
+									  BCA
+									</label>
+									<label class="radio-inline" for="gender-1">
+									  <input name="course" id="course-1" value="bcom" <%= course == 'bcom'   ? 'checked' : ''%> type="radio">
+									  B.COM
+									</label>
+									<label class="radio-inline" for="gender-1">
+									  <input name="course" id="course-2" value="bsc" <%= course == 'bsc'   ? 'checked' : ''%> type="radio">
+									  B.Sc
+									</label>
+									<label class="radio-inline" for="gender-1">
+									  <input name="course" id="course-3" value="ba" <%= course == 'ba'   ? 'checked' : ''%> type="radio">
+									  B.A
+									</label>
+								  </div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="action-button">
+								<input type="submit" class="btn btn-green submit-form" value="Submit"/>
+								<input type="reset" class="btn btn-orange" value="Reset"/>
+							</div>
+						</div>
+					</div>
+				</div>				
+			</div>
+		</form>
+	</div>
+</div>

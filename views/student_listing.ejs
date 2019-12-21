@@ -1,0 +1,96 @@
+<div class="container">
+	<div class="ManagementSystem">
+		<h1 class="form-title">Student Detail</h1>
+		<div class="option-buttons">
+		<div class="row">
+			<div class="col-lg-8 col-md-8 col-sm-8">
+				<label href="#" class="btn btn-orange"><i class="fa fa-plus-circle"></i> Add Student <input type="file" name="add-file" id="add-file" class="inputfile" /></label>
+				<label href="#" class="btn btn-green"><i class="fa fa-plus-circle"></i> Import CSV <input type="file" name="import-file" id="import-file" class="inputfile" /></label>
+				<label href="#" class="btn btn-orange"><i class="fa fa-plus-circle"></i> Export CSV <input type="file" name="export-file" id="export-file" class="inputfile" /></label>
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search for...">
+					  <span class="input-group-btn">
+						<button class="btn btn-search btn-green" type="button"><i class="fa fa-search fa-fw"></i> Search</button>
+					  </span>
+				</div>
+			</div>
+		</div>
+			
+			
+		</div>
+		<div class="table-responsive">
+			<table class="user-detail">			
+				<thead>
+					<tr>
+						<th><input type="checkbox" name="all-selected" value=""/></th>
+						<th>Student Id</th>
+						<th>Student</th>
+						<th>Course</th>
+						<th>Email id</th>
+						<th>Qualification</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<% 	const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+						let current_datetime = new Date()
+					 %>
+					<% for (let student of students) { %>
+					<tr>
+						<td><input type="checkbox" name="selected1" value=""/></td>
+						<td><%= student._id %></td>
+						<td>
+							<div class="image">
+								<img src="images/user.png" class="img-responsive"/>
+							</div>
+							<h4 class="user-name"><%= student.sd_first_name + student.sd_last_name %></h4>
+							<h5 class="user-gender"><%= student.gender %></h5>
+							<h5 class="user-dob"><%= student.sd_dob.getDate() + "-" + months[current_datetime.getMonth()] +  "-" + current_datetime.getFullYear() ;  %></h5>
+							<div class="user-address">
+								<p><%= student.sd_address %></p>
+							</div>
+						</td>
+						<td><%= student.sd_applied_course %></td>
+						<td><%= student.sd_email %></td>
+						<td>XII passout</td>
+						<td><a href="" class="btn btn-green"><i class="fa fa-download"></i> Document</a>
+							<div class="user-actions">
+								<a href="" class="btn btn-orange" title="View"><i class="fa fa-eye"></i> </a>
+								<form action="/<%= student._id %>?_method=DELETE" method="post">
+									<button class="btn btn-orange" title="Delete"><i class="fa fa-trash"></i> </button>
+								</form>
+								<a href="../edit_student/<%= student._id %>" class="btn btn-orange" title="Edit"><i class="fa fa-pencil"></i> </a>
+							</div>
+						</td>
+					</tr>
+					<% } %>
+				</tbody>
+			</table>
+		</div>
+		<div class="pager-navigation">
+        <ul class="pagination">
+			<li ><a href="#">&laquo;</a></li>
+			  
+				
+			<% if(typeof total_students == 'undefined' ){ %>
+				<%  total_students = 1;  %>
+			<% } %>
+
+			<% total_records = total_students %>
+			<% limit = 2 %>
+			<% total_pages = Math.ceil(total_records / limit) %>
+
+			<% for(i=1;i <= total_pages; i++){ %>
+				<% if(page_no == i){ %>
+					<li class="active"><a href="/student-listing/<%= i %>"><%= i %></a></li>
+				<% } else{ %>
+					<li><a href="/student-listing/<%= i %>"><%= i %></a></li>
+				<% } %>
+			<% } %>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
+	</div>
+</div>

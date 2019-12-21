@@ -1,0 +1,379 @@
+header {
+    padding: 10px;
+    box-shadow: 0 0 1px #ccc;
+	z-index: 9;
+    position: relative;
+}
+.user-account {
+    text-align: right;
+	    padding: 7px 0;
+}
+.user-account ul {
+    padding-left: 0;
+    list-style: none;
+	margin-bottom:0;
+}
+.user-account ul li {
+    display: inline-block;
+	    margin-left: 30px;
+}
+.user-account ul li:first-child{ margin-left: 0px;}
+.btn.btn-logout{background: #ef5656;}
+.btn.btn-logout:hover, .btn.btn-logout:focus{background: #dc4444;}
+.user-account li .account-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+}
+.user-welcome {
+    font-size: 16px;
+    font-weight: normal;
+    color: #556080;
+    margin-bottom: 8px;
+    text-align: left;
+    text-transform: capitalize;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.ManagementSystem {
+    padding: 30px;
+    background: #fbfbfb;
+	min-height: 520px;
+}
+.ManagementSystem h1.form-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 30px;
+    font-weight: normal;
+    padding-bottom: 20px;
+    position: relative;
+	color:#556080;
+}
+.ManagementSystem h1.form-title:after {
+    position: absolute;
+    content: '';
+    border-bottom: 3px solid #556080;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 20%;
+    margin: 0 auto;
+}
+.ManagementSystem .form-control {
+    border: 1px solid #e8e8e8;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 40px;
+}
+.ManagementSystem .btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.ManagementSystem .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+.ManagementSystem label{
+	font-weight:normal;font-size: 15px;
+    color: #556080;
+	}
+.ManagementSystem label.radio-inline, .ManagementSystem label.checkbox-inline {
+    font-size: 14px;
+    color: #333;
+}
+.ManagementSystem .profile-pic .form-control {
+    min-height: auto;
+}
+.ManagementSystem .profile-pic .btn-file {
+    background: #556080;
+    color: #fff;
+}
+.ManagementSystem #img-upload {
+    width: 100%;
+    max-width: 128px;
+    margin: 0 auto;
+	border-radius:50px;
+	margin: 20px auto 30px;
+	    max-height: 128px;
+}
+.profile-pic{
+	background: #fff;
+    padding: 20px;
+    border: 1px solid #efefef;
+	text-align: center;
+	margin-bottom: 20px;
+}
+.profile-pic label {
+    width: 100%;
+}
+.ManagementSystem table td, .ManagementSystem table th {
+    padding: 10px;
+}
+.ManagementSystem table th {
+    text-align: center;
+	font-weight: normal;
+}
+.action-button {
+    border-top: 1px solid #e6e4e4;
+    padding: 30px 0;
+    margin-top: 20px;
+    text-align: center;
+}
+.ManagementSystem .action-button .btn {    
+    color: #fff;
+    padding: 8px 40px;
+    margin: 0 10px;
+    border-radius: 0;
+}
+.btn-green, .btn-green:hover, .btn-green:focus{background: #f59f19;color:#fff;}
+.btn-orange, .btn-orange:hover, .btn-orange:focus{background: #556080;color:#fff;}
+.ManagementSystem .form-group {
+    margin-bottom: 30px;
+}
+span.kb_error_message {
+    position: absolute;
+    font-size: 13px;
+    color: #f31b1b;
+}
+.ManagementSystem .form-group{
+	position:relative;
+}
+label.error {
+    color: #d2322d;
+    margin-bottom: 0px;
+    margin-top: 3px;
+    font-size: 13px;
+    width: 100%;
+}
+.form-group.has-error .form-control {
+    border-color: #d2322d;
+}
+.ManagementSystem .custom-error {
+    color: #d2322d;
+    margin-bottom: 0px;
+    margin-top: 3px;
+    font-size: 13px;
+    width: 100%;
+}
+footer {
+    background: #424040;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+}
+footer p{margin-bottom:0;}
+table.user-detail {
+    width: 100%;
+}
+table.user-detail td, table.user-detail th {
+    border: 1px solid #ccc;
+    padding: 10px;
+	text-align: center;
+}
+.user-detail .image {
+    float: left;
+    max-width: 70px;
+    margin-right: 10px;
+}
+.user-name {
+    font-size: 16px;
+    font-weight: normal;
+    color: #556080;
+    margin-bottom: 8px;
+	text-align: left;
+	 text-transform: capitalize;
+}
+.user-gender, .user-dob {
+    margin: 0;
+    font-size: 13px;
+    color: #828282;
+    font-weight: normal;
+    margin-bottom: 5px;
+	text-align: left;
+}
+.user-address p{
+	 margin: 0;
+    font-size: 14px;
+    color: #828282;
+    font-weight: normal;
+    margin-bottom: 5px;
+    margin-top: 5px;
+	text-align: left;
+}
+.user-detail thead {
+    background: #556080;
+    color: #fff;
+}
+.option-buttons {
+    margin-bottom: 20px;
+}
+.option-buttons .btn-search {
+    min-height: 40px;
+	background: #4999c7;
+}
+.option-buttons .btn-orange {
+    background: #4999c7;
+}
+.option-buttons label.btn{margin-right:15px;color:#fff;}
+.inputfile {
+  /* visibility: hidden etc. wont work */
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+.inputfile:focus + label {
+  /* keyboard navigation */
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+.inputfile + label * {
+  pointer-events: none;
+}
+.user-actions {
+    margin-top: 10px;
+}
+.forgot_block a {
+    color: #556080;
+    text-decoration: none;
+}
+.signup-content .sign_in {
+    padding: 8px 40px;
+    border-radius: 0;
+    font-size: 16px;
+}
+.user-data {
+    padding: 15px 0px;
+}
+.user-data .grey {
+    width: 150px;
+    display: inline-block;
+    padding-right: 20px;
+    color: #858788;
+}
+.user-data .blue {
+    color: #556080;
+}
+.user-data.full-width {
+    width: 100%;
+}
+.user-detail-view .row {
+    border-bottom: 1px solid #e4e4e4;
+}
+.profile-pic.viewimage {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+.user-detail-view {
+    padding: 0 20px;
+}
+.print-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+.print-actions .btn {
+    padding: 8px 30px;
+    margin: 0 10px 10px;
+    font-size: 16px;
+}
+.profile-pic .input-group{margin-bottom:30px;}
+.pager-navigation {
+    text-align: right;
+}
+ul.pagination li a {
+    color: #556080;
+}
+.save-data .box {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
+    width: 100%;
+    max-width: 200px;
+}
+.save-data .box label {
+    font-weight: normal;
+    color: #fff;
+}
+.student-count p span {
+    font-size: 15px;
+    padding-right: 10px;
+    color: #858788;
+}
+.student-count p {
+    color: #556080;
+}
+.save-data .table-responsive {
+    margin-top: 30px;
+}
+
+
+
+@media (max-width:992px)
+{
+	.user-detail-view .row {
+    border-bottom: 0px solid #e4e4e4;
+	}
+	.user-data{border-bottom: 1px solid #e4e4e4;}
+	.user-data .grey {
+    width: auto;
+	}
+}
+
+@media(max-width:767px)
+{
+	.ManagementSystem h1.form-title
+	{margin-top:0;}
+	.option-buttons label.btn{margin-bottom:20px;}
+}
+@media(max-width:560px)
+{
+	.btn.btn-logout {
+		font-size: 0;
+		border-radius: 50px;
+		padding: 0;
+		width: 32px;
+		height: 32px;
+		box-shadow: none;
+	}
+	.btn.btn-logout i {
+		font-size: 15px;
+		vertical-align: middle;
+		line-height: 2;
+		text-align: center;
+	}
+	.user-account ul li {
+		display: inline-block;
+		margin-left: 15px;
+	}
+	.user-welcome {
+		font-size: 14px;
+		margin-right: 0;
+		vertical-align: middle;
+		display: block;
+		position: absolute;
+		top: -8px;
+		right: 15px;
+	}
+	.user-account {
+		text-align: right;
+		padding: 15px 0 0;
+	}
+	.logo img {
+		max-width: 90px;
+		margin-top: 14px;
+	}
+}
