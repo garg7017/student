@@ -84,12 +84,10 @@ router.post('/export_csv',(req,res)=>{
 /**
  * Login Route
  */
-/**
-* Commented code Prashant
-*router.get('/login',(req,res)=>{
-*    res.render('login',{layout:'edit_layout'});
-*})
-*/
+router.get('/login',(req,res)=>{
+    res.render('login',{layout:'edit_layout'});
+})
+
 
 
 /**
