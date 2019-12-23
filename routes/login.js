@@ -6,9 +6,9 @@ const app = express();
 
 
 
-router.get('/login',(req,res)=>{
+router.get('/login',(req,res,next)=>{
    console.log("hhhh");
-    res.render('login');
+    res.render('login',{layout:'login'});
 });
 
 
