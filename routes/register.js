@@ -6,8 +6,79 @@ const express = require('express');
 const router = express.Router();
 const app = express();
 const countryStatePpicker = require('country-state-picker');
-
 const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
+
+
+
+router.post('/export_csv',(req,res)=>{
+    let student_arr = [];
+
+    const csvWriter = createCsvWriter({
+        path: 'C:/node/new_course/student_node/public/uploads/files/out.csv',
+        header: [
+          {id: 'id', title: 'ID'},
+          {id: 'fname', title: 'FirstName'},
+          {id: 'lname', title: 'LastName'},
+          {id: 'dob', title: 'DOB'},
+          {id: 'email', title: 'Email'},
+          {id: 'phone', title: 'Phone'},
+          {id: 'gender', title: 'Gender'},
+          {id: 'address', title: 'Address'},
+          {id: 'city', title: 'City'},
+          {id: 'zip_code', title: 'ZipCode'},
+          {id: 'state', title: 'State'},
+          {id: 'country', title: 'Country'},
+
+          {id: 'hobbies', title: 'Hobbies'},
+          {id: 'applied_course', title: 'AppliedCourse'},
+          {id: 'course_name', title: 'CourseName'},
+          {id: 'board', title: 'Board'},
+          {id: 'percentage', title: 'Percentage'},
+          {id: 'yop', title: 'Year Of Passing'},
+
+          {id: 'course_name', title: 'CourseName'},
+          {id: 'board', title: 'Board'},
+          {id: 'percentage', title: 'Percentage'},
+          {id: 'yop', title: 'Year Of Passing'},
+        ]
+      });
+    //   csvWriter.writeRecords(student_arr).then(saved=>{
+    //       console.log('saved successfully');
+    //   }).catch(err=>{
+    //       console.log(err);
+    //   })
+
+
+    StudentDetail.find({}).then(students=>{
+        for(let student of students){
+            id = student._id;
+            student_arr = JSON.stringify(student);
+            // console.log(student_arr);
+            StudentAcedemicDetail.find({sad_student_id:student._id}).then(academicDetails=>{
+                if(academicDetails.length > 0){
+                    for(let academicDetail of academicDetails){
+                        if(academicDetail.sad_course_name == '10'){
+                            academic_data_X = JSON.stringify(academicDetail);
+                            student_arr = student_arr + academic_data_X;
+                        } else {
+                            academic_data_XII = JSON.stringify(academicDetail);
+                            student_arr = student_arr + academic_data_XII;
+                        }
+                    }
+                
+                }
+            })
+        }
+        csvWriter.writeRecords(student_arr).then(saved=>{
+            console.log('The CSV file was written successfully');
+        }).catch(err=>{
+            console.log(err);
+        })
+    })
+})
+
 
 
 /**

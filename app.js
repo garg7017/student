@@ -8,6 +8,10 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const session = require('express-session')
 const app = express();
+const {mongoDbUrl} = require('./config/database');
+
+
+
 
 app.use(bodyParser());
 app.use(cors());
@@ -23,7 +27,7 @@ app.set('view engine', 'ejs');
 mongoose.Promise = global.Promise;
 
 /** Connection string to connect with DB */
-mongoose.connect('mongodb://root:Admin123@ds251158.mlab.com:51158/student',{ useNewUrlParser: true },(err) => {
+mongoose.connect(mongoDbUrl,{useNewUrlParser: true },(err) => {
 	if(err){
 		console.log(err);
 	} else {
@@ -39,7 +43,7 @@ app.use(session({secret: 'user_session',saveUninitialized: true,resave: true}));
 
 const register = require('./routes/register');
 const login = require('./routes/login');
-// const studentListing = require('./routes/studentListing');
+const studentListing = require('./routes/studentListing');
 
 
 
@@ -47,12 +51,13 @@ const login = require('./routes/login');
 
 app.use('/', register);
 app.use('/login', login);
-// app.use('/student_listing', studentListing);
+app.use('/student_listing', studentListing);
 
 
+const port = process.env.PORT || 3000;
 
 // Server Port
-app.listen(3000, function(){
-    console.log("Sever is running on Port 3000");
+app.listen(port, function(){
+    console.log(`Sever is running on Port ${port}`);
 });
 

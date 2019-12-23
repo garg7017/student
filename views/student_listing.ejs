@@ -6,7 +6,10 @@
 			<div class="col-lg-8 col-md-8 col-sm-8">
 				<label href="#" class="btn btn-orange"><i class="fa fa-plus-circle"></i> Add Student <input type="file" name="add-file" id="add-file" class="inputfile" /></label>
 				<label href="#" class="btn btn-green"><i class="fa fa-plus-circle"></i> Import CSV <input type="file" name="import-file" id="import-file" class="inputfile" /></label>
-				<label href="#" class="btn btn-orange"><i class="fa fa-plus-circle"></i> Export CSV <input type="file" name="export-file" id="export-file" class="inputfile" /></label>
+				
+				<form method="post" action="export_csv" style="margin-left: 277px;margin-top: -34px;">
+					<button class="btn btn-orange"><i class="fa fa-plus-circle"></i> Export CSV</button>
+				</form>
 			</div>
 			<div class="col-lg-4 col-md-4 col-sm-4">
 				<div class="input-group">
@@ -81,7 +84,6 @@
 			<% total_records = total_students %>
 			<% limit = 2 %>
 			<% total_pages = Math.ceil(total_records / limit) %>
-
 			<% for(i=1;i <= total_pages; i++){ %>
 				<% if(page_no == i){ %>
 					<li class="active"><a href="/student-listing/<%= i %>"><%= i %></a></li>
