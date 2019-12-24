@@ -3,6 +3,7 @@ const StudentDetail = require('../models/StudentDetail');
 const express = require('express');
 const router = express.Router();
 const app = express();
+
 const Strategy = require('passport').Strategy;
 
 
@@ -47,6 +48,16 @@ router.post('/',(req,res,next)=>{
         res.render('login',{errors:errors});
     }
 })
+
+
+
+
+router.get('/login',(req,res,next)=>{
+   console.log("hhhh");
+    res.render('login',{layout:'login'});
+});
+
+
 
 
 
