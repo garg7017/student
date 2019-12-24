@@ -69,7 +69,7 @@ module.exports = {
         if (hobby_arr.length === 0) {
             errors.push({ type: 'hobby', message: 'Please select any hobby' });
         }
-        if (req.body.country.trim() == '') {
+        if (req.body.country == '') {
             errors.push({ type: 'country', message: 'Please select country' });
         }
         if (!req.body.X_board) {

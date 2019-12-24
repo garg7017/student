@@ -12,8 +12,13 @@ const {mongoDbUrl} = require('./config/database');
 
 
 
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
 
-app.use(bodyParser());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(cors());
 app.use(methodOverride('_method'));
 
@@ -27,7 +32,7 @@ app.set('view engine', 'ejs');
 mongoose.Promise = global.Promise;
 
 /** Connection string to connect with DB */
-mongoose.connect(mongoDbUrl,{useNewUrlParser: true },(err) => {
+mongoose.connect(mongoDbUrl,{useNewUrlParser: true,useUnifiedTopology: true },(err) => {
 	if(err){
 		console.log(err);
 	} else {
@@ -40,7 +45,6 @@ app.use(session({secret: 'user_session',saveUninitialized: true,resave: true}));
 
 
 // Load Routes
-
 const register = require('./routes/register');
 const login = require('./routes/login');
 const studentListing = require('./routes/studentListing');
@@ -48,8 +52,8 @@ const studentListing = require('./routes/studentListing');
 
 
 // Use Routes
-
 app.use('/', register);
+app.use('/index', register);
 app.use('/login', login);
 app.use('/student_listing', studentListing);
 
