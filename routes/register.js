@@ -11,105 +11,57 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const multer = require('multer');
 const upload = multer({ dest: 'public/uploads/images/' });
 const bcrypt = require('bcryptjs');
-
+const faker = require('faker');
 
 
 
 router.use('/login', require('./login'));
 router.use('/student-listing', require('./studentListing'));
 router.use('/export_csv', require('./exportCsv'));
+router.use('/logout', require('./logout'));
 
 
-router.post('/export_csv',(req,res)=>{
-    let student_arr = [];
-
-    const csvWriter = createCsvWriter({
-        path: 'C:/node/new_course/student_node/public/uploads/files/out.csv',
-        header: [
-          {id: 'id', title: 'ID'},
-          {id: 'fname', title: 'FirstName'},
-          {id: 'lname', title: 'LastName'},
-          {id: 'dob', title: 'DOB'},
-          {id: 'email', title: 'Email'},
-          {id: 'phone', title: 'Phone'},
-          {id: 'gender', title: 'Gender'},
-          {id: 'address', title: 'Address'},
-          {id: 'city', title: 'City'},
-          {id: 'zip_code', title: 'ZipCode'},
-          {id: 'state', title: 'State'},
-          {id: 'country', title: 'Country'},
-
-          {id: 'hobbies', title: 'Hobbies'},
-          {id: 'applied_course', title: 'AppliedCourse'},
-          {id: 'course_name', title: 'CourseName'},
-          {id: 'board', title: 'Board'},
-          {id: 'percentage', title: 'Percentage'},
-          {id: 'yop', title: 'Year Of Passing'},
-
-          {id: 'course_name', title: 'CourseName'},
-          {id: 'board', title: 'Board'},
-          {id: 'percentage', title: 'Percentage'},
-          {id: 'yop', title: 'Year Of Passing'},
-        ]
-      });
-    //   csvWriter.writeRecords(student_arr).then(saved=>{
-    //       console.log('saved successfully');
-    //   }).catch(err=>{
-    //       console.log(err);
-    //   })
 
 
-    StudentDetail.find({}).then(students=>{
-        for(let student of students){
-            id = student._id;
-            student_arr = JSON.stringify(student);
-            // console.log(student_arr);
-            StudentAcedemicDetail.find({sad_student_id:student._id}).then(academicDetails=>{
-                if(academicDetails.length > 0){
-                    for(let academicDetail of academicDetails){
-                        if(academicDetail.sad_course_name == '10'){
-                            academic_data_X = JSON.stringify(academicDetail);
-                            student_arr = student_arr + academic_data_X;
-                        } else {
-                            academic_data_XII = JSON.stringify(academicDetail);
-                            student_arr = student_arr + academic_data_XII;
-                        }
-                    }
-                
-                }
+
+//generate fake student records
+router.post('/generate-fake-student',(req,res)=>{
+    // res.send('Working');
+
+    for(let i=0; i<= 100;i++){
+        let studentDetail = new StudentDetail();
+
+
+        studentDetail.sd_first_name = faker.name.findName();
+        studentDetail.sd_last_name = 'Garg';
+        studentDetail.sd_dob = faker.date.future();
+        studentDetail.sd_email = faker.internet.email();
+        studentDetail.sd_password = '123';
+        studentDetail.sd_phone = '9636377696';
+        studentDetail.sd_gender = 'Male';
+        studentDetail.sd_address = faker.address.streetAddress();
+        studentDetail.sd_city = faker.address.city();
+        studentDetail.sd_zip_code = '321201';
+        studentDetail.sd_state = faker.random.words();
+        studentDetail.sd_country = faker.address.country();
+        studentDetail.sd_hobbies = faker.random.words();
+        studentDetail.sd_applied_course = 'ba';
+
+
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(studentDetail.sd_password, salt, (err, hash) => {
+                studentDetail.sd_password = hash;
+
+                studentDetail.save().then(fakeStudentSaved=>{
+                    console.log("saved data");
+                }).catch(err=>{
+                    console.log(err);
+                })
+
             })
-        }
-        csvWriter.writeRecords(student_arr).then(saved=>{
-            console.log('The CSV file was written successfully');
-        }).catch(err=>{
-            console.log(err);
-        })
-    })
+        });
+    }
 })
-
-
-
-/**
- * Login Route
- */
-router.get('/login',(req,res)=>{
-    res.render('login',{layout:'edit_layout'});
-})
-
-
-
-
-/**
- * Logout route
- */
-router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return console.log(err);
-        }
-        res.redirect('/login');
-    });
-});
 
 
 
@@ -142,20 +94,25 @@ router.delete('/:id', (req, res) => {
 /**
  * Check user login
  */
-function checkAuthantication(req) {
-    // let authorize = false;
-    // user_session = req.session;
-    // console.log(user_session.email);
-    // if (user_session.email) {
-        return true;
-    // } else {
-    //     return false;
-    // }
+function checkAuthantication(req){
+    let authorize = false;
+    if(typeof req.session.passport != 'undefined'){
+        user_session = req.session;
+        if(typeof req.session.passport.user == 'undefined'){
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 
 
-
+/**
+ * Index page: form to register a student
+ */
 router.get('/', (req, res) => {
     authorize = checkAuthantication(req);
     if (authorize) {
@@ -177,9 +134,10 @@ router.get('/', (req, res) => {
  */
 router.get('/edit_student/:id', (req, res) => {
     id = req.params.id;
+    let countries = countryStatePpicker.getCountries();
     StudentDetail.findById(id).then(student => {
         StudentAcedemicDetail.find({ sad_student_id: id }).then(academicData => {
-            res.render('edit_student', { layout: 'edit_layout', data: student, data2: academicData });
+            res.render('edit_student', { layout: 'edit_layout', data: student, data2: academicData,countries:countries });
         })
     })
 })
@@ -188,6 +146,7 @@ router.get('/edit_student/:id', (req, res) => {
 /**
  * Edit Post data
  */
+
 router.post('/edit_student/update_student', (req, res) => {
     var id = req.body.update;
     errors = validate(req);
@@ -234,7 +193,8 @@ router.post('/edit_student/update_student', (req, res) => {
                         console.log("Update 12th data");
                     })
                 })
-                res.render('student_listing');
+                console.log("Updated");
+                res.redirect('student-listing');
             })
         })
     } else {
@@ -244,32 +204,10 @@ router.post('/edit_student/update_student', (req, res) => {
 
 
 
-
-// router.get('/index', (req,res)=>{
-//     let countries = countryStatePpicker.getCountries();
-//     res.render('index',{countries:countries});  
-// })
-
-
 /** 
  * Registration case
  * */
-router.post('/index', upload.single('avatar'), (req, res) => {
-
-    // console.log(req);
-    // console.log(req.body);
-    // console.log(req.avatar);
-    // if(req.file){
-    //     res.json(req.file);
-    // } else {
-    //     throw 'error';
-    // }
-    // return false;
-
-
-
-    // console.log(encrypted_pwd);
-    // return false;
+router.post('/index', (req, res) => {
 
     hobby_arr = req.body.hobby;
     errors = validate(req);

@@ -82,8 +82,10 @@
 			<% } %>
 
 			<% total_records = total_students %>
-			<% limit = 2 %>
+			<!-- <%= total_records %> -->
+			<% limit = 10 %>
 			<% total_pages = Math.ceil(total_records / limit) %>
+			<!-- <%= total_pages %> -->
 			<% for(i=1;i <= total_pages; i++){ %>
 				<% if(page_no == i){ %>
 					<li class="active"><a href="/student-listing/<%= i %>"><%= i %></a></li>

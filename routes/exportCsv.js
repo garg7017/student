@@ -35,8 +35,8 @@ router.post('/',(req,res)=>{
         ]
       });
 
-      var student_arr = [];      
-      var dataArray = [];
+      var student_arr = new Array();      
+      var dataArray = new Array();
 
     //   StudentDetail.find(function (err,students){
     //       if(err) throw err;
@@ -58,7 +58,6 @@ router.post('/',(req,res)=>{
         for(let student of students){
             
             id = student._id;
-
             // Student details 
             dataArray['id'] = student._id;
             dataArray['first_name'] = student.sd_first_name;
@@ -77,7 +76,7 @@ router.post('/',(req,res)=>{
 
 
             //Academic Details
-            StudentAcedemicDetail.find({sad_student_id:student._id},function(err,academicDetails){
+            StudentAcedemicDetail.find({sad_student_id:student._id},  function(err,academicDetails){
                 if(academicDetails.length > 0){
                     for(let academicDetail of academicDetails){
                         if(academicDetail.sad_course_name == '10'){
@@ -92,14 +91,11 @@ router.post('/',(req,res)=>{
                             dataArray['yop_XII'] = academicDetail.sad_year_of_passing;
                         }
                     }
-                    student_arr[id] = dataArray;
-                    console.log(student_arr);
+                    student_arr.push(dataArray);
                 }
             })
-            student_arr[id] = dataArray;
-            console.log(student_arr);
         }
-        console.log(student_arr);
+        // callback(student_arr);
     })
     
     // csvWriter.writeRecords(student_arr).then(saved=>{
@@ -108,7 +104,6 @@ router.post('/',(req,res)=>{
     //     console.log(err);
     // })
 });
-
 
 
 

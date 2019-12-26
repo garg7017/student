@@ -9,6 +9,9 @@ const methodOverride = require('method-override');
 const session = require('express-session')
 const app = express();
 const {mongoDbUrl} = require('./config/database');
+const passport = require('passport');
+const flash = require('connect-flash');
+
 
 
 
@@ -43,13 +46,33 @@ mongoose.connect(mongoDbUrl,{useNewUrlParser: true,useUnifiedTopology: true },(e
 
 app.use(session({secret: 'user_session',saveUninitialized: true,resave: true}));
 
+app.use(flash());
+
+
+app.use((req, res, next)=>{
+	res.locals.user = req.session;
+	next();
+});
+
+
+// app.use(function (req, res, next) {
+// 	if(typeof req.sessionOptions.maxAge != 'undefined'){
+// 				req.sessionOptions.maxAge = 2 * 60 * 60 * 1000 // 2 hours,
+// 	} 
+// 	next()
+// })
+
+// PASSPORT
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 // Load Routes
 const register = require('./routes/register');
 const login = require('./routes/login');
 const studentListing = require('./routes/studentListing');
-
-
 
 // Use Routes
 app.use('/', register);

@@ -229,9 +229,9 @@
 								<label>Country <span class="color-danger">*</span></label>
 								<select name="country" class="form-control" >
 									<option value=""   <%= country == ''   ? 'selected' : ''%> >(please select a country)</option>
-									<option value="AF" <%= country == 'AF' ? 'selected' : ''%> >Afghanistan </option>
-									<option value="AL" <%= country == 'AL' ? 'selected' : ''%> >Albania </option>
-									<option value="DZ" <%= country == 'DZ' ? 'selected' : ''%> >Algeria </option>
+									<% for(let country_data of countries) { %>
+										<option value="<%= country_data.code %>" <%= country_data.code == country ? 'selected' : ''  %> ><%= country_data.name %> </option>
+									<% } %>
 								</select>
 							</div>
 						</div>						

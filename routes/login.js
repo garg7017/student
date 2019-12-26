@@ -4,8 +4,9 @@ const express = require('express');
 const router = express.Router();
 const app = express();
 
-const Strategy = require('passport').Strategy;
-
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
 
 
 router.get('/',(req,res)=>{
@@ -13,8 +14,39 @@ router.get('/',(req,res)=>{
 })
 
 
+
+
+
+passport.use(new LocalStrategy({usernameField: 'email'},(email,password,done)=>{
+    StudentDetail.find({sd_email:email}).then(user=>{
+        if(!user) return done(null, false, {message: 'No user found'});
+        
+        bcrypt.compare(password, user[0].sd_password, (err, matched)=>{
+            if(matched){
+                return done(null, user);
+            } else {
+                return done(null, false, { message: 'Incorrect password' });
+            }
+        })
+    })
+}));
+
+
+passport.serializeUser(function(user, done) {
+    done(null, user[0]._id);
+});
+
+passport.deserializeUser(function(id, done) {
+    StudentDetail.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
+
+
+
+
 router.post('/',(req,res,next)=>{
-    // console.log(req.body);
     let errors = [];
     if(req.body.email == ''){
         errors.push({ type: 'email', message: 'please enter Email' });
@@ -23,29 +55,13 @@ router.post('/',(req,res,next)=>{
         errors.push({ type: 'password', message: 'please enter password' });
     }
     if(errors.length == 0){
-
         passport.authenticate('local',{
-            successRedirect:'/student_listing',
-            failureRedirect:'/student_listing'
+            successRedirect:'/student-listing',
+            failureRedirect:'/login',
+            failureFlash: true
         })(req,res,next);
-
-
-        StudentDetail.find({sd_email:req.body.email, sd_password:req.body.password}).then(validPassword=>{
-            if(validPassword.length == 0){
-                    errors.push({ type: 'password2',  message: 'Incorrect username or password.' });
-                    res.render('login',{errors:errors});
-            } else {
-                // console.log(validPassword);
-                // console.log(validPassword[0].sd_email);
-                user_session = req.session;
-                user_session.email = validPassword[0].sd_email;
-                user_session.name = (validPassword[0].sd_first_name) + ' ' + validPassword[0].sd_last_name;
-
-                res.redirect('student_listing');
-            }
-        })
     } else {
-        res.render('login',{errors:errors});
+        res.render('login',{layout:'edit_layout', errors:errors});
     }
 })
 
@@ -53,7 +69,6 @@ router.post('/',(req,res,next)=>{
 
 
 router.get('/login',(req,res,next)=>{
-   console.log("hhhh");
     res.render('login',{layout:'login'});
 });
 
