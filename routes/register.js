@@ -1,7 +1,7 @@
 const StudentDetail = require('../models/StudentDetail');
 const StudentAcedemicDetail = require('../models/StudentAcedemicDetail');
 const { validate } = require('../helpers/form_validation_helper')
-
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const app = express();
@@ -30,7 +30,6 @@ router.post('/generate-fake-student',(req,res)=>{
 
     for(let i=0; i<= 100;i++){
         let studentDetail = new StudentDetail();
-
 
         studentDetail.sd_first_name = faker.name.findName();
         studentDetail.sd_last_name = 'Garg';
@@ -176,24 +175,51 @@ router.post('/edit_student/update_student', (req, res) => {
             data.save().then(updateStaudentDetail => {
                 //Update 10th academic details
                 StudentAcedemicDetail.find({ sad_student_id: id, sad_course_name: '10' }).then(academicData => {
-                    academicData.sad_board = req.body.X_board;
-                    academicData.sad_percentage = req.body.X_perc;
-                    academicData.sad_year_of_passing = req.body.X_yop;
-                    academicData.save().then(updateAcademic_X => {
-                        console.log("Update 10th data");
-                    })
+                    if(academicData.length > 0){
+                        academicData.sad_board = req.body.X_board;
+                        academicData.sad_percentage = req.body.X_perc;
+                        academicData.sad_year_of_passing = req.body.X_yop;
+                        academicData.update.then(updateAcademic_X => {
+                            console.log("Update 10th data");
+                        })
+                    } else {
+                        const acedemicDetail_X = new StudentAcedemicDetail({
+                            sad_student_id: id,
+                            sad_course_name: '10',
+                            sad_board: req.body.X_board,
+                            sad_percentage: req.body.X_perc,
+                            sad_year_of_passing: req.body.X_yop,
+                        })
+
+                        acedemicDetail_X.save().then(saved=>{
+                            console.log("data saved: X");
+                        })
+                    }
                 })
 
                 //Update 12th academic details
                 StudentAcedemicDetail.find({ sad_student_id: id, sad_course_name: '12' }).then(academicData_XII => {
-                    academicData_XII.sad_board = req.body.XII_board;
-                    academicData_XII.sad_percentage = req.body.XII_perc;
-                    academicData_XII.sad_year_of_passing = req.body.XII_yop;
-                    academicData_XII.save().then(updateAcademic_XII => {
-                        console.log("Update 12th data");
-                    })
+                    if(academicData_XII.length > 0){
+                        academicData_XII.sad_board = req.body.XII_board;
+                        academicData_XII.sad_percentage = req.body.XII_perc;
+                        academicData_XII.sad_year_of_passing = req.body.XII_yop;
+                        academicData_XII.update().then(updateAcademic_XII => {
+                            console.log("Update 12th data");
+                        })
+                    } else {
+                        const acedemicDetail_XII = new StudentAcedemicDetail({
+                            sad_student_id: id,
+                            sad_course_name: '12',
+                            sad_board: req.body.XII_board,
+                            sad_percentage: req.body.XII_perc,
+                            sad_year_of_passing: req.body.XII_yop,
+                        })
+
+                        acedemicDetail_XII.save().then(saved=>{
+                            console.log("data saved: XII");
+                        })
+                    }
                 })
-                console.log("Updated");
                 res.redirect('student-listing');
             })
         })

@@ -63,8 +63,7 @@ const StudentDetailsSchema = new Schema({
         type: String
     },
     sd_date_added:{
-        type: Date,
-        default: Date.now
+        type: Date,default: Date.now
     },
     sd_date_modified:{
         type: Date,

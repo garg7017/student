@@ -33,7 +33,7 @@ router.get('/', (req,res)=>{
 
         StudentDetail.countDocuments({}).then(total=>{
             total_students = total;
-            StudentDetail.find({}).limit(10).then(students=>{
+            StudentDetail.findById({}).limit(10).then(students=>{
                 res.render('student_listing', {students:students,total_students:total_students,page_no:page});
             })
         })
